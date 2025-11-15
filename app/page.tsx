@@ -2,6 +2,9 @@ import fs from 'fs'
 import path from 'path'
 import CatFactDisplay from './components/CatFactDisplay';
 
+// Force dynamic rendering on each request instead of static generation
+export const dynamic = 'force-dynamic'
+
 // Load cat facts and select a random one for initial render
 const jsonDirectory = path.join(process.cwd(), 'data')
 const fileContents = fs.readFileSync(jsonDirectory + '/catFacts.json', 'utf8')
