@@ -1,19 +1,26 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import Image from 'next/image'
 
-export default function CatFactDisplay() {
-  const [fact, setFact] = useState<string>('')
+interface CatFactDisplayProps {
+  initialFact: string
+}
 
-  const fetchFact = async () => {
-    const response = await fetch('/api/catfact')
-    const data = await response.json()
-    setFact(data.fact)
-  }
+export default function CatFactDisplay({ initialFact }: CatFactDisplayProps) {
+  const [fact, setFact] = useState<string>(initialFact)
 
-  useEffect(() => {
-    fetchFact()
+  const fetchFact = useCallback(async () => {
+    try {
+      const response = await fetch('/api/catfact')
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const data = await response.json()
+      setFact(data.fact)
+    } catch (error) {
+      console.error('Error fetching cat fact:', error)
+    }
   }, [])
 
   return (
